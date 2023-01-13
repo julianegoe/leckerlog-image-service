@@ -41,5 +41,5 @@ app.post('/image/upload', upload.single("file"), async (req: Request, res: Respo
 });
 
 app.listen(port, () => {
-  console.log(`⚡️[server]: Server running at http://localhost:${port}`);
+  console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
 });
