@@ -20,7 +20,6 @@ app.use(cors({
     origin: ['http://localhost:5173', 'https://prod.leckerlog.dwk.li'],
 }));
 app.use(express.json());
-// app.use('/', checkJwt);
 
 app.get('/', async (req: Request, res: Response) => {
     res.status(200).json('Hello world')
