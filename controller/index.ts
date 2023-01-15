@@ -25,21 +25,31 @@ app.get('/', async (req: Request, res: Response) => {
     res.status(200).json('Hello world')
 })
 
-app.post('/image/upload', upload.single("file"), async (req: Request, res: Response) => {
+app.post('/upload', upload.single("file"), async (req: Request, res: Response) => {
     var metaData = {
         'Content-Type': 'application/octet-stream',
-      }
+    }
     const { file } = req;
     const path = file?.path
     const fileName = file?.originalname;
     if (file) {
         client.fPutObject("images", fileName, path, metaData, function (error: any, objInfo: any) {
-            if (error)  res.status(500).json(error)
+            if (error) res.status(500).json(error)
             res.status(200).json(objInfo)
         });
     }
 });
 
+app.get("/download", function (req: Request, res: Response) {
+    client.getObject('images', req.query.filename, (err: any, dataStream: any) => {
+        if (err) {
+          res.status(404).send(err.toString())
+        } else {
+          dataStream.pipe(res)
+        }
+      })
+});
+
 app.listen(port, () => {
-  console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
+    console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
 });

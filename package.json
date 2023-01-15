@@ -2,7 +2,7 @@
   "scripts": {
     "build": "npx tsc",
     "start": "node dist/controller/index.js",
-    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/constroller/index.js\""
+    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\""
   },
   "dependencies": {
     "body-parser": "^1.20.1",

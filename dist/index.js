@@ -15,10 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Minio = require('minio');
 const express_1 = __importDefault(require("express"));
 const multer_1 = __importDefault(require("multer"));
-const express_oauth2_jwt_bearer_1 = require("express-oauth2-jwt-bearer");
 const dotenv_1 = __importDefault(require("dotenv"));
 const cors_1 = __importDefault(require("cors"));
-const minio_service_1 = require("../services/minio-service");
 dotenv_1.default.config();
 const client = new Minio.Client({
     endPoint: process.env.MINIO_STORANGE_ENDPOINT,
@@ -28,26 +26,14 @@ const client = new Minio.Client({
 const app = (0, express_1.default)();
 const port = process.env.PORT;
 const upload = (0, multer_1.default)({ dest: 'uploads/' });
-const checkJwt = (0, express_oauth2_jwt_bearer_1.auth)({
-    audience: 'https://api.leckerlog.dwk.li',
-    issuerBaseURL: `https://dev-rv3t1xmkfttbcgdv.us.auth0.com/`,
-});
 app.use((0, cors_1.default)({
     origin: ['http://localhost:5173', 'https://prod.leckerlog.dwk.li'],
 }));
 app.use(express_1.default.json());
-// app.use('/', checkJwt);
 app.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.status(200).json('Hello world');
 }));
-app.get('/image/:imageName', (req, res) => {
-    const { imageName } = req.params;
-    const assets = (0, minio_service_1.getDownloadLink)();
-    res.json({
-        download_urls: assets,
-    });
-});
-app.post('/image/upload', upload.single("file"), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.post('/upload', upload.single("file"), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var metaData = {
         'Content-Type': 'application/octet-stream',
     };
@@ -62,6 +48,16 @@ app.post('/image/upload', upload.single("file"), (req, res) => __awaiter(void 0,
         });
     }
 }));
+app.get("/download", function (req, res) {
+    client.getObject('images', req.query.filename, (err, dataStream) => {
+        if (err) {
+            res.status(404).send(err.toString());
+        }
+        else {
+            dataStream.pipe(res);
+        }
+    });
+});
 app.listen(port, () => {
     console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
 });
