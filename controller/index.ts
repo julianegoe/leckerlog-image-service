@@ -65,11 +65,14 @@ app.get("/download", function (req: Request, res: Response) {
     });
 });
 
-app.put('/create/bucket', async (req: Request, res: Response) => {
-    const { bucketName } = req.query;
-    client.makeBucket(bucketName, 'eu-central', function(err: Error) {
+app.get('/create/bucket', async (req: Request, res: Response) => {
+    const { bucketname } = req.query;
+    client.makeBucket(bucketname, 'eu-east-1', function(err: Error) {
         if (err) return console.log('Error creating bucket.', err)
-        console.log('Bucket created successfully in "eu-central".')
+        console.log('Bucket created successfully in "eu-east-1".')
+        res.status(200).json({
+            message: 'Bucket successfully created.'
+        })
       })
 })
 

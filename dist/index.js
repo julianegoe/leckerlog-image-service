@@ -71,12 +71,15 @@ app.get("/download", function (req, res) {
         }
     });
 });
-app.put('/create/bucket', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { bucketName } = req.query;
-    client.makeBucket(bucketName, 'eu-central', function (err) {
+app.get('/create/bucket', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { bucketname } = req.query;
+    client.makeBucket(bucketname, 'eu-east-1', function (err) {
         if (err)
             return console.log('Error creating bucket.', err);
-        console.log('Bucket created successfully in "eu-central".');
+        console.log('Bucket created successfully in "eu-east-1".');
+        res.status(200).json({
+            message: 'Bucket successfully created.'
+        });
     });
 }));
 app.listen(port, () => {
