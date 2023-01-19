@@ -1,7 +1,7 @@
 {
   "scripts": {
     "build": "npx tsc",
-    "start": "node dist/controller/index.js",
+    "start": "node dist/index.js",
     "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\""
   },
   "dependencies": {
