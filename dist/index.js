@@ -71,7 +71,7 @@ app.get("/download", function (req, res) {
         }
     });
 });
-app.get('/create/bucket', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.put('/create/bucket', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { bucketName } = req.query;
     client.makeBucket(bucketName, 'eu-central', function (err) {
         if (err)

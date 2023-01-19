@@ -65,7 +65,7 @@ app.get("/download", function (req: Request, res: Response) {
     });
 });
 
-app.get('/create/bucket', async (req: Request, res: Response) => {
+app.put('/create/bucket', async (req: Request, res: Response) => {
     const { bucketName } = req.query;
     client.makeBucket(bucketName, 'eu-central', function(err: Error) {
         if (err) return console.log('Error creating bucket.', err)
