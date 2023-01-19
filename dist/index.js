@@ -31,16 +31,29 @@ app.use((0, cors_1.default)({
 }));
 app.use(express_1.default.json());
 app.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.status(200).json('Hello world');
+    res.status(200).json({
+        message: 'Welcome to Leckerlog Images Service',
+    });
+}));
+app.get('/list', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let data = [];
+    var stream = client.listObjects('images', '', true);
+    stream.on('data', function (obj) { data.push(obj); });
+    stream.on("end", function () {
+        res.status(200).json(data);
+    });
+    stream.on('error', function (err) {
+        res.status(404).send(err.toString());
+    });
 }));
 app.post('/upload', upload.single("file"), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var metaData = {
         'Content-Type': 'application/octet-stream',
     };
     const { file } = req;
-    const path = file === null || file === void 0 ? void 0 : file.path;
-    const fileName = file === null || file === void 0 ? void 0 : file.originalname;
     if (file) {
+        const path = file.path;
+        const fileName = file.originalname;
         client.fPutObject("images", fileName, path, metaData, function (error, objInfo) {
             if (error)
                 res.status(500).json(error);
