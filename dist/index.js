@@ -71,6 +71,14 @@ app.get("/download", function (req, res) {
         }
     });
 });
+app.get('/create/bucket', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { bucketName } = req.query;
+    client.makeBucket(bucketName, 'eu-central', function (err) {
+        if (err)
+            return console.log('Error creating bucket.', err);
+        console.log('Bucket created successfully in "eu-central".');
+    });
+}));
 app.listen(port, () => {
     console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
 });
